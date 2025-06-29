@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matej Krsteski | Portfolio</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation-->
+  <header>
+    <div class="nav">
+      <a href="#home" class="logo">Matej Krsteski</a>
+      <div class="hamburger" id="hamburger" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </div>
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="#about" class="navigation-link">About</a></li>
+          <li><a href="#education" class="navigation-link">Education</a></li>
+          <li><a href="#skills" class="navigation-link">Skills</a></li>
+          <li><a href="#projects" class="navigation-link">Projects</a></li>
+          <li><a href="#contact" class="navigation-link">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Home -->
+  <section id="home" class="container">
+    <img src="assets/profile.jpg" alt="My Profile Picture" class="pfp-img" />
+    <h1 class="title-intro">Hello, I'm Matej Krsteski</h1>
+    <p class="intro-text">Computer Science student passionate about artificial intelligence, space exploration, & web development. 
+      I am eager to create innovative solutions at the intersection of tech and science.</p>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="container">
+    <h2>About Me</h2>
+    <p>I am a BSc Computer Science student at Ss. Cyril and Methodius University in Skopje. 
+      My interests span artificial intelligence, cyber security, space technologies, and game development. 
+      Beyond academics, I enjoy participating in hackathons, public speaking, and constantly pushing the boundaries of my skills through self‑driven projects and online courses like Harvard's CS50 series.</p>
+  </section>
+
+  <!-- Education -->
+  <section id="education" class="container">
+    <h2>Education</h2>
+    <div class="education-container">
+      <div class="education-item">
+        <h3>BSc Computer Science</h3>
+        <em>Ss. Cyril and Methodius University, 2024 – Present</em>
+        <p>Coursework: Object Oriented Programming, Structural Programming, Calculus 1/2, Discrete Structures 1/2.</p>
+      </div>
+      <div class="education-item">
+        <h3>High School Diploma (GPA 4.98/5)</h3>
+        <em>SUGS Rade Jovče vski Korčagin, 2020 – 2024</em>
+        <p>Focus: Mathematics & Science Gymnasium. Graduation project: <em>Application of AI in Space Exploration</em>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="container">
+    <h2>Skills</h2>
+    <h3>Technical</h3>
+    <div class="skills-grid">
+      <div class="skill">C / C++</div>
+      <div class="skill">Python</div>
+      <div class="skill">HTML &amp; CSS</div>
+      <div class="skill">JavaScript</div>
+      <div class="skill">Unity &amp; C#</div>
+      <div class="skill">Lua</div>
+      <div class="skill">Graphic Design</div>
+      <div class="skill">AI</div>
+    </div>
+    <h3 class="skills-h3">Soft Skills</h3>
+    <div class="skills-grid">
+      <div class="skill">Team Leadership</div>
+      <div class="skill">Public Speaking</div>
+      <div class="skill">Project Management</div>
+      <div class="skill">Problem‑Solving</div>
+      <div class="skill">Communication</div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="container">
+    <h2>Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <img src="assets/iss.jpg" alt="Image of ISS Tracker website">
+        <div class="content">
+          <h3>ISS Tracker</h3>
+          <p>Mathematical model & web interface for tracking the International Space Station. <em>NASA Space Apps Challenge 2022</em>.</p>
+          <a href="https://2022.spaceappschallenge.org/challenges/2022-challenges/track-the-iss/teams/aerth/project" target="_blank">View Project ↗</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="assets/gameJam.jpg" alt="Image of Skopje Game Jam">
+        <div class="content">
+          <h3>Global Game Jam 2024</h3>
+          <p>Lead programmer for a 2D platformer built in Unity & C# during a 48‑hour jam.</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="assets/dungeonEscape2.png" alt="Cover Image of Dungeon Escape game">
+        <div class="content">
+          <h3>Dungeon Escape</h3>
+          <p>Procedurally generated rogue‑like dungeon crawler video game developed for Harvard CS50 Game Dev course.</p>
+          <a href="https://matthewcodesgames.itch.io/dungeonescape" target="_blank">Play Game ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="container">
+    <h2>Contact</h2>
+    <p>Feel free to reach out via email or the form below. I am always open to new projects, collaborations, or just a friendly chat!</p>
+    <form action="mailto:krsteski.matej05@gmail.com" method="post" enctype="text/plain">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; <span id="year"></span> Matej Krsteski. All rights reserved.
+  </footer>
+
+  <!-- JavaScript: Mobile Nav bar, Dynamic Navbar and Year -->
+  <script src="script.js"></script>
+
+</body>
+</html>
