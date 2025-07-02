@@ -1,9 +1,10 @@
 :root {
-  --bg: #121212;
-  --card-bg: #1e1e1e;
-  --foreground: #e0e0e0;
-  --accent: #00adb5;
-  --accent-light: #00cdd7;
+  --bg: #1b1a1a;
+  --card-bg: #262526;
+  --foreground: #fefefe;
+  --accent: #ff4d00;
+  --accent-light: #ff875e;
+
   --max-width: 1080px;
   --bold-text: 600
 }
@@ -44,7 +45,7 @@ section {
 
 /*      Navigation      */
 header {
-  background: rgba(18, 18, 18, 0.9);
+  background: rgba(26, 26, 26, 0.9);
   position: fixed;
   top: 0;
   left: 0;
@@ -221,7 +222,7 @@ button {
   cursor: pointer;
   padding: 0.75rem 1rem;
   border: none;
-  background: var(--accent);
+  background: var(--accent-light);
   color: var(--bg);
   border-radius: 6px;
   font-weight: var(--bold-text);
@@ -229,13 +230,13 @@ button {
 }
 
 button:hover {
-  background-color: var(--accent-light);
+  background-color: var(--accent);
 }
 
 footer {
   text-align: center;
   padding: 2rem 0;
-  background: #0d0d0d;
+  background: #151515;
   font-size: 0.9rem;
 }
 
