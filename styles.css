@@ -15,6 +15,7 @@
   box-sizing: border-box;
   scroll-behavior: smooth; /* Smooth Scroll transition */
   font-family: 'Poppins', sans-serif;
+  z-index: 10;
 }
 
 body {
@@ -62,6 +63,7 @@ header {
   width: min(90%, var(--max-width));
   margin: 0 auto;
   padding: 1rem 0;
+  z-index: 999;
 }
 
 .logo {
@@ -98,13 +100,33 @@ nav a:hover {
 }
 
 /*      Home      */
+
+/* .canvas-mask {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.9) 100%);
+  z-index: 1;
+  pointer-events: none;
+} */
+
+#star-canvas {
+  position: absolute;
+  display: none;
+  /* inset: 0;
+  z-index: 0; */
+}
+
 #home {
   min-height: 100vh; /* Home page is screen height */
+  width:100%;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center; 
   flex-direction: column;
+
+  /* position: relative;
+  overflow: hidden; */
 }
 .title-intro {
   font-size: 70px;
@@ -273,3 +295,7 @@ footer {
   }
   nav ul.open { transform: translateY(0);}   /* go "revealnuvame" panelot (vrakjame na pocetna pozicija) */
 } 
+
+@media (min-width: 1365px) {
+  #star-canvas {display: flex;}
+}

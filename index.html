@@ -31,6 +31,8 @@
 
   <!-- Home -->
   <section id="home" class="container">
+    <div class="canvas-mask"></div>
+    <canvas id="star-canvas"></canvas>
     <img src="assets/profile.jpg" alt="My Profile Picture" class="pfp-img" />
     <h1 class="title-intro">Hello, I'm Matej Krsteski</h1>
     <p class="intro-text">Computer Science student passionate about artificial intelligence, space exploration, & web development. 
@@ -135,6 +137,167 @@
 
   <!-- JavaScript: Mobile Nav bar, Dynamic Navbar and Year -->
   <script src="script.js"></script>
+    <!-- Dot‑network script -->
+  <script>
+    (function () {
+      const home   = document.getElementById('home');
+      const canvas = document.getElementById('star-canvas');
+      const ctx    = canvas.getContext('2d');
+
+      /* ------- configuration ------- */
+      // const POINTS        = 280;      // dot count
+      canvas.width  = home.clientWidth;
+      canvas.height = home.clientHeight;
+
+      const baseArea = 1920 * 1080;  // reference resolution (Full HD)
+      const basePoints = 280;         // base dot count
+
+      const currentArea = canvas.width * canvas.height;
+      const POINTS = Math.floor(basePoints * currentArea / baseArea*1.2);
+
+      // const CURSOR_RADIUS = 220;      // accent radius (px)
+      const baseCursorRadius = 220;           // your current fixed cursor radius in px
+      const baseReferenceWidth = 1920;        // reference screen width for scaling
+
+      const CURSOR_RADIUS = Math.floor(baseCursorRadius * canvas.width / baseReferenceWidth);
+
+      const LOCAL_RADIUS  = CURSOR_RADIUS * 2; // inter‑dot visibility radius
+      const CONNECT_DIST  = 150;      // threshold between two dots
+      const PARALLAX      = 0;     // scroll parallax factor
+
+      const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00adb5';
+      const cursor = { x: -9999, y: -9999 };
+      let dots = [];
+
+      /* helpers */
+      const rand = (min, max) => Math.random() * (max - min) + min;
+      const hexToRgba = (hex, a) => {
+        let h = hex.replace('#', '');
+        if (h.length === 3) h = h.split('').map(c => c + c).join('');
+        const n = parseInt(h, 16);
+        return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+      };
+
+      function initDots() {
+        dots = Array.from({ length: POINTS }, () => ({
+          x: rand(0, canvas.width),
+          y: rand(0, canvas.height),
+          vx: rand(-0.05, 0.05),
+          vy: rand(-0.05, 0.05)
+        }));
+      }
+
+      function resize() {
+        canvas.width  = home.clientWidth;
+        canvas.height = home.clientHeight;
+        initDots();
+        applyParallax();
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      /* mouse tracking */
+      home.addEventListener('mousemove', e => {
+        const rect = home.getBoundingClientRect();
+        cursor.x = e.clientX - rect.left;
+        cursor.y = e.clientY - rect.top;
+      });
+      home.addEventListener('mouseleave', () => { cursor.x = cursor.y = -9999; });
+
+      /* parallax */
+      function applyParallax() {
+        canvas.style.transform = `translateY(${window.scrollY * PARALLAX}px)`;
+      }
+      window.addEventListener('scroll', applyParallax);
+
+      function drift() {
+        for (const d of dots) {
+          d.x += d.vx;
+          d.y += d.vy;
+          if (d.x <= 0 || d.x >= canvas.width)  d.vx *= -1;
+          if (d.y <= 0 || d.y >= canvas.height) d.vy *= -1;
+        }
+      }
+
+      /* render loop */
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        
+        // Inter‑dot lines inside LOCAL_RADIUS
+        for (let i = 0; i < dots.length; i++) {
+          const p = dots[i];
+          const pDistCursor = Math.hypot(p.x - cursor.x, p.y - cursor.y);
+          if (pDistCursor > LOCAL_RADIUS) continue;
+
+          for (let j = i + 1; j < dots.length; j++) {
+            const q = dots[j];
+            const qDistCursor = Math.hypot(q.x - cursor.x, q.y - cursor.y);
+            if (qDistCursor > LOCAL_RADIUS) continue;
+
+            const dist = Math.hypot(p.x - q.x, p.y - q.y);
+            if (dist < CONNECT_DIST) {
+              const linkAlpha = (1 - dist / CONNECT_DIST) * (1 - Math.max(pDistCursor, qDistCursor) / LOCAL_RADIUS);
+              ctx.strokeStyle = `rgba(255,255,255,${linkAlpha * 0.6})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Accent lines to cursor within CURSOR_RADIUS
+        for (const d of dots) {
+          const distC = Math.hypot(d.x - cursor.x, d.y - cursor.y);
+          if (distC < CURSOR_RADIUS) {
+            const alpha = 1 - distC / CURSOR_RADIUS;
+            ctx.strokeStyle = hexToRgba(accentHex, alpha);
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(d.x, d.y);
+            ctx.lineTo(cursor.x, cursor.y);
+            ctx.stroke();
+          }
+        }
+
+        // Draw dots with varying opacity: full if inside LOCAL_RADIUS, dim outside
+        for (const d of dots) {
+          const dist = Math.hypot(d.x - cursor.x, d.y - cursor.y);
+          const alphaDot = dist < LOCAL_RADIUS ? 0.85 : 0.25; // dim outside
+          ctx.fillStyle = `rgba(255,255,255,${alphaDot})`;
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        drift();
+
+        // Fade out stars in the center with a radial mask
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        const mask = ctx.createRadialGradient(
+          centerX, centerY, 160,     // Inner radius (fully transparent)
+          centerX, centerY, 400      // Outer radius (fully visible)
+        );
+        mask.addColorStop(0, 'rgba(0, 0, 0, 0.8)');   // Full black in center (removes star brightness)
+        mask.addColorStop(1, 'rgba(0, 0, 0, 0)');   // No black outside (full star visibility)
+
+        ctx.fillStyle = mask;
+        // ctx.globalAlpha = 0.3;
+        ctx.globalCompositeOperation = 'destination-out'; // Punch transparent hole
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // ctx.globalAlpha = 1.0; 
+        ctx.globalCompositeOperation = 'source-over';     // Restore normal drawing mode
+
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
 
 </body>
 </html>
